@@ -216,7 +216,7 @@ SIDEBAR = dbc.Col([
     # ── Footer ──
     html.Hr(),
     html.Div([
-        html.Small("🌿 "),
+        html.Small(" "),
         html.Strong("Canopy Geospatial Solutions"),
         html.Br(),
         html.Small("Generated using "),
@@ -273,7 +273,7 @@ app.layout = dbc.Container([
     dbc.Row(dbc.Col(html.Div([
         html.Hr(className="mt-4"),
         html.P([
-            "🌿 ", html.Strong("Maintained by Canopy Geospatial Solutions"),
+            " ", html.Strong("Maintained and Hosted by Canopy Geospatial Solutions"),
             " | Generated using ",
             html.Strong("E.U. Copernicus Marine Service Information"),
             " · ",
