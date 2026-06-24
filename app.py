@@ -51,10 +51,14 @@ def get_units(ds, var): return ds[var].attrs.get("units","")
 def load_ds(path): return xr.open_dataset(path, decode_times=True)
 
 def decode_upload(contents, filename):
-    _, b64 = contents.split(",")
-    data = base64.b64decode(b64)
+    if not contents:
+        raise ValueError("No file content received.")
+    # Split only on the FIRST comma — base64 payload may contain commas in padding
+    _, b64 = contents.split(",", 1)
+    data = base64.b64decode(b64 + "==")   # pad to avoid incorrect length errors
     path = os.path.join(TMP_DIR, f"{uuid.uuid4().hex}_{filename}")
-    with open(path,"wb") as f: f.write(data)
+    with open(path, "wb") as f:
+        f.write(data)
     return path
 
 def clip_ds(ds, dims, bbox):
@@ -216,7 +220,7 @@ SIDEBAR = dbc.Col([
     # ── Footer ──
     html.Hr(),
     html.Div([
-        html.Small(" "),
+        html.Small("🌿 "),
         html.Strong("Canopy Geospatial Solutions"),
         html.Br(),
         html.Small("Generated using "),
@@ -273,7 +277,7 @@ app.layout = dbc.Container([
     dbc.Row(dbc.Col(html.Div([
         html.Hr(className="mt-4"),
         html.P([
-            " ", html.Strong("Maintained and Hosted by Canopy Geospatial Solutions"),
+            "🌿 ", html.Strong("Maintained by Canopy Geospatial Solutions"),
             " | Generated using ",
             html.Strong("E.U. Copernicus Marine Service Information"),
             " · ",
@@ -407,8 +411,8 @@ def cb_aoi(contents, filename):
         import geopandas as gpd
         try: import pyogrio; engine = "pyogrio"
         except ImportError: engine = "fiona"
-        _, b64 = contents.split(",")
-        data = base64.b64decode(b64)
+        _, b64 = contents.split(",", 1)
+        data = base64.b64decode(b64 + "==")
         tmp = tempfile.mkdtemp()
         fn = filename.lower()
         if fn.endswith(".zip"):
