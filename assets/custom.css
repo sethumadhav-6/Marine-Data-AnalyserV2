@@ -1,0 +1,13 @@
+
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #f8fafc; }
+.sidebar-brand { border-bottom: 2px solid #0077b6; padding-bottom: 10px; margin-bottom: 12px; }
+.card { border: none !important; border-radius: 10px !important; }
+.card-header { background: #e8f4fd !important; color: #023e8a !important;
+               font-size: 0.82rem; padding: 8px 14px !important; border-radius: 10px 10px 0 0 !important; }
+.nav-tabs .nav-link { font-size: 0.82rem; color: #495057; }
+.nav-tabs .nav-link.active { color: #0077b6 !important; font-weight: 600;
+                              border-bottom: 3px solid #0077b6 !important; }
+.nav-tabs .nav-link.disabled { color: #ccc !important; cursor: not-allowed; }
+.landing-card { border-left: 5px solid #0077b6 !important; }
+.status-bar { background: #0077b6; color: #fff; font-size: 0.78rem;
+              padding: 4px 16px; border-radius: 0 0 6px 6px; }
