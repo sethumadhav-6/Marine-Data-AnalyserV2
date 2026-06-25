@@ -36,7 +36,12 @@ app = dash.Dash(
     title="Copernicus Marine Visualiser",
 )
 server = app.server
-TMP_DIR = tempfile.mkdtemp(prefix="copernicus_")
+
+# Use a fixed, predictable temp directory so all gunicorn threads/workers
+# share the same upload location.  tempfile.mkdtemp() returns a DIFFERENT
+# path for every worker process, which causes "file not found" errors on Render.
+TMP_DIR = os.path.join(tempfile.gettempdir(), "copernicus_uploads")
+os.makedirs(TMP_DIR, exist_ok=True)
 
 _ASSETS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets")
 os.makedirs(_ASSETS, exist_ok=True)
@@ -530,9 +535,15 @@ SIDEBAR = dbc.Col([
 
         # Path
         html.Div(id="div-path", style={"display":"none"}, children=[
+            dbc.Alert([
+                html.I(className="fa fa-exclamation-triangle me-1"),
+                html.Strong("Local / self-hosted only. "),
+                "Enter a path that exists on the machine running this app. "
+                "On Render cloud this means the server's filesystem (use Download instead).",
+            ], color="warning", className="small py-1 mb-2"),
             dbc.InputGroup([
                 dbc.InputGroupText(html.I(className="fa fa-folder-open")),
-                dbc.Input(id="path-input", placeholder=r"E:\data\file.nc"),
+                dbc.Input(id="path-input", placeholder=r"E:\data\file.nc or /data/file.nc"),
             ], size="sm", className="mb-1"),
             dbc.Button([html.I(className="fa fa-play me-1"), "Load"],
                        id="btn-path", color="primary", size="sm", className="w-100"),
